@@ -8,8 +8,8 @@
 -   [x] Authentication for admin functionality.
 -   [ ] Easy way to email the customer a qr code.
 -   [x] Update customer information (name, last name, email).
--   [ ] Log that the customer bought a product covered by an offer.
--   [ ] Display if the customer got a discount on a product.
+-   [x] Log that the customer bought a product covered by an offer.
+-   [x] Display if the customer got a discount on a product.
 
 ## Available to Admin (Requires login)
 
@@ -42,8 +42,8 @@
 ## Customer Info Page
 
 -   [x] Customer first name, last name, email
--   [ ] Buttons to log a purchase (Requires confirmation).
-    -   [ ] Will display discount if discount applies.
+-   [x] Buttons to log a purchase (Requires confirmation).
+    -   [x] Will display discount if discount applies.
 -   [x] Edit button to edit customer info.
 -   [ ] Admin button that will require login to show.
     -   [ ] Will show undo last log button.

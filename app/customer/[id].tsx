@@ -1,7 +1,9 @@
+import { Auth } from "@/components/auth";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { UuidTool } from "uuid-tool";
 
@@ -16,6 +18,7 @@ type Customer = {
 export default function ViewCustomer() {
     const db = useSQLiteContext();
     const { id } = useLocalSearchParams();
+    const [open, setOpen] = useState(false);
 
     // @ts-ignore
     const idBytes = UuidTool.toBytes(id);
@@ -60,6 +63,40 @@ export default function ViewCustomer() {
                 gap: 16,
             }}
         >
+            <Auth
+                onAuthenticated={() => {
+                    // Undo last offer
+                    try {
+                        db.runSync(
+                            `
+                            UPDATE customers
+                            set offer_${customer.last_offer} = offer_${customer.last_offer} - 1
+                            WHERE id = ?;
+                        `,
+                            // @ts-ignore
+                            [idBytes],
+                        );
+                    } catch (error) {}
+
+                    db.runSync(
+                        `
+                        UPDATE customers
+                        SET last_offer = NULL
+                        WHERE id = ?;
+                                            `,
+                        // @ts-ignore
+                        [idBytes],
+                    );
+                    setOpen(false);
+                    router.replace({
+                        pathname: "/customer/[id]",
+                        // @ts-ignore
+                        params: { id: id },
+                    });
+                }}
+                open={open}
+                setOpen={setOpen}
+            />
             <View>
                 <Text
                     style={{
@@ -153,24 +190,26 @@ export default function ViewCustomer() {
                     flexDirection: "row",
                 }}
             >
-                <Pressable
-                    style={({ pressed }) => [
-                        {
-                            backgroundColor: "#fb6962",
-                            opacity: pressed ? 0.8 : 1,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: 8,
-                            flexGrow: 1,
-                            padding: 8,
-                        },
-                    ]}
-                    onPress={() => {
-                        // TODO: Undo last offer
-                    }}
-                >
-                    <MaterialIcons name="undo" size={24} color="white" />
-                </Pressable>
+                {customer.last_offer && (
+                    <Pressable
+                        style={({ pressed }) => [
+                            {
+                                backgroundColor: "#fb6962",
+                                opacity: pressed ? 0.8 : 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 8,
+                                flexGrow: 1,
+                                padding: 8,
+                            },
+                        ]}
+                        onPress={() => {
+                            setOpen(true);
+                        }}
+                    >
+                        <MaterialIcons name="undo" size={24} color="white" />
+                    </Pressable>
+                )}
                 <Pressable
                     style={({ pressed }) => [
                         {
@@ -271,7 +310,52 @@ const OfferView = (props: { offer: Offer; id: number[] }) => {
                 },
             ]}
             onPress={() => {
-                // TODO: Increment offer
+                return Alert.alert(
+                    "Are you sure?",
+                    ` Are you sure you want to apply this offer (${props.offer.product}) to this customer?`,
+                    [
+                        {
+                            text: "Yes",
+                            onPress: () => {
+                                // Increment the offer count
+                                db.runSync(
+                                    `
+                                    UPDATE customers
+                                    SET last_offer = ?, offer_${props.offer.id} = offer_${props.offer.id} + 1
+                                    WHERE id = ?;
+                                    
+                                `,
+                                    // @ts-ignore
+                                    [props.offer.id, props.id],
+                                );
+
+                                const occurrences = db.getFirstSync(
+                                    `SELECT offer_${props.offer.id} FROM customers WHERE id = ?`,
+                                    // @ts-ignore
+                                    [props.id],
+                                );
+
+                                // Check if the offer should be applied
+                                if (
+                                    // @ts-ignore
+                                    occurrences[`offer_${props.offer.id}`] %
+                                        props.offer.frequency ===
+                                    0
+                                ) {
+                                    router.navigate({
+                                        pathname: "/offer/[id]",
+                                        params: {
+                                            id: props.offer.id,
+                                        },
+                                    });
+                                } else {
+                                    router.dismiss();
+                                }
+                            },
+                        },
+                        { text: "No" },
+                    ],
+                );
             }}
         >
             <MaterialIcons name="local-offer" size={40} />
