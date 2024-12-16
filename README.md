@@ -2,7 +2,8 @@
 
 ## Available to Receptionist
 
--   [ ] Add a new customer. Easy way to email the customer a qr code.
+-   [ ] Add a new customer.
+-   [ ] Easy way to email the customer a qr code.
 -   [ ] Search for a specific customer by fist name and last name or email.
 -   [x] Scan a qr code to get the customer information.
 -   [ ] Update customer information (name, last name, email).
