@@ -69,6 +69,10 @@ export default function RootLayout() {
                         name="customer/edit/[id]"
                         options={{ title: "Edit Customer Details" }}
                     />
+                    <Stack.Screen
+                        name="offer/[id]"
+                        options={{ title: "Discount Applied" }}
+                    />
                 </Stack>
                 <Database />
             </KeyboardProvider>

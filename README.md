@@ -3,19 +3,19 @@
 ## Available to Receptionist
 
 -   [x] Add a new customer.
--   [ ] Easy way to email the customer a qr code.
 -   [x] Search for a specific customer by fist name and last name or email.
 -   [x] Scan a qr code to get the customer information.
--   [ ] Authentication for admin functionality.
--   [ ] Update customer information (name, last name, email).
+-   [x] Authentication for admin functionality.
+-   [ ] Easy way to email the customer a qr code.
+-   [x] Update customer information (name, last name, email).
 -   [ ] Log that the customer bought a product covered by an offer.
 -   [ ] Display if the customer got a discount on a product.
 
 ## Available to Admin (Requires login)
 
--   [ ] Undo the last log if a mistake was made.
 -   [x] Add a new offer with custom discount and time frame.
 -   [x] Remove an offer.
+-   [ ] Undo the last log if a mistake was made.
 
 # UI
 
@@ -41,17 +41,17 @@
 
 ## Customer Info Page
 
--   [ ] Customer first name, last name, email
+-   [x] Customer first name, last name, email
 -   [ ] Buttons to log a purchase (Requires confirmation).
     -   [ ] Will display discount if discount applies.
--   [ ] Edit button to edit customer info.
+-   [x] Edit button to edit customer info.
 -   [ ] Admin button that will require login to show.
     -   [ ] Will show undo last log button.
 
 ## Edit Customer Page
 
--   [ ] Has 3 text fields for first name, last name, email.
--   [ ] Has a button to save the changes. (Requires confirmation)
+-   [x] Has 3 text fields for first name, last name, email.
+-   [x] Has a button to save the changes. (Requires confirmation)
 
 ## Admin Page
 
