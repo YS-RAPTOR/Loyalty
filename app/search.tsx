@@ -1,7 +1,10 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import { EditableCustomer } from "@/components/editableCustomer";
 import { useSQLiteContext } from "expo-sqlite";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
+import { UuidTool } from "uuid-tool";
 
 type Customer = {
     id: string;
@@ -31,6 +34,7 @@ export default function Search() {
             style={{
                 flex: 1,
                 padding: 16,
+                gap: 10,
             }}
         >
             <EditableCustomer
@@ -62,13 +66,62 @@ export default function Search() {
                 </Text>
             )}
             <FlatList
+                style={{
+                    gap: 16,
+                }}
                 data={data}
                 renderItem={({ item }) => (
-                    <Text>
-                        {item.first_name} {item.last_name}
-                    </Text>
+                    <Pressable
+                        style={({ pressed }) => [
+                            {
+                                padding: 10,
+                                borderWidth: 1,
+                                borderRadius: 4,
+                                flexDirection: "row",
+                                gap: 8,
+                                alignItems: "center",
+                                backgroundColor: pressed
+                                    ? "#ddd"
+                                    : "transparent",
+                            },
+                        ]}
+                        onPress={() => {
+                            router.navigate({
+                                pathname: "/customer/[id]",
+                                params: {
+                                    id: UuidTool.toString(
+                                        item.id
+                                            .substring(1, item.id.length - 1)
+                                            .split(",")
+                                            .map((x) => parseInt(x)),
+                                    ),
+                                },
+                            });
+                        }}
+                    >
+                        <Ionicons name="person-circle-sharp" size={40} />
+                        <View>
+                            <Text style={styles.text}>
+                                Name: {item.first_name} {item.last_name}
+                            </Text>
+                            <Text style={styles.text}>Email: {item.email}</Text>
+                            {item.phone_number && (
+                                <Text style={styles.text}>
+                                    Phone Number: {item.phone_number}
+                                </Text>
+                            )}
+                        </View>
+                    </Pressable>
                 )}
+                ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
             ></FlatList>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 12,
+        fontWeight: "semibold",
+    },
+});

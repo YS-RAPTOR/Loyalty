@@ -2,9 +2,9 @@
 
 ## Available to Receptionist
 
--   [ ] Add a new customer.
+-   [x] Add a new customer.
 -   [ ] Easy way to email the customer a qr code.
--   [ ] Search for a specific customer by fist name and last name or email.
+-   [x] Search for a specific customer by fist name and last name or email.
 -   [x] Scan a qr code to get the customer information.
 -   [ ] Update customer information (name, last name, email).
 -   [ ] Log that the customer bought a product covered by an offer.
@@ -31,12 +31,12 @@
 -   [x] Has 3 text fields for first name, last name, email.
 -   [x] Has to include both first name and last name or email.
 -   [x] Has a search button.
--   [ ] Shows results if found.
+-   [x] Shows results if found.
 
 ## Add Customer Page
 
 -   [x] Has 3 text fields for first name, last name, email.
--   [ ] Has a button to add the customer (Requires confirmation).
+-   [x] Has a button to add the customer (Requires confirmation).
 
 ## Customer Info Page
 
@@ -49,7 +49,7 @@
 
 ## Edit Customer Page
 
--   [x] Has 3 text fields for first name, last name, email.
+-   [ ] Has 3 text fields for first name, last name, email.
 -   [ ] Has a button to save the changes. (Requires confirmation)
 
 ## Admin Page

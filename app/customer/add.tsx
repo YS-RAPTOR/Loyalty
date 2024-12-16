@@ -1,11 +1,12 @@
 import { EditableCustomer } from "@/components/editableCustomer";
-import { Text, View } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Alert, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import * as Crypto from "expo-crypto";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { router } from "expo-router";
+import { UuidTool } from "uuid-tool";
 
 export default function Add() {
     const db = useSQLiteContext();
@@ -28,7 +29,7 @@ export default function Add() {
                     flexShrink: 0,
                 }}
             >
-                <MaterialIcons name="person-pin" size={250}></MaterialIcons>
+                <Ionicons name="person-circle-sharp" size={250}></Ionicons>
             </View>
 
             <EditableCustomer
@@ -48,46 +49,74 @@ export default function Add() {
                     }
                     setRequired(false);
 
-                    const idString = Crypto.randomUUID();
-                    const id = uuidToBytes(idString);
+                    return Alert.alert(
+                        "Add Customer",
+                        "Are you sure you wnat to add this customer? Are all customer details correct?",
+                        [
+                            {
+                                text: "Yes",
+                                onPress: () => {
+                                    const idString = Crypto.randomUUID();
+                                    const id = UuidTool.toBytes(idString);
 
-                    try {
-                        if (phoneNumber === undefined) {
-                            db.runSync(
-                                `
-                            INSERT INTO customers (id, first_name, last_name, email)
-                            VALUES (?, ?, ?, ?);
-                        `,
-                                [id, firstName, lastName, email],
-                            );
-                        } else {
-                            db.runSync(
-                                `
-                            INSERT INTO customers (id, first_name, last_name, email, phone_number)
-                            VALUES (?, ?, ?, ?, ?);
-                        `,
-                                [id, firstName, lastName, email, phoneNumber],
-                            );
-                        }
-                    } catch (error) {
-                        const e = error as Error;
-                        if (
-                            e.message.includes(
-                                "UNIQUE constraint failed: customers.email",
-                            )
-                        ) {
-                            setError("Email already exists.");
-                        } else {
-                            setError("An error occurred: " + e.message);
-                        }
-                        return;
-                    }
-                    router.replace({
-                        pathname: "/customer/[id]",
-                        params: {
-                            id: idString,
-                        },
-                    });
+                                    try {
+                                        if (phoneNumber === undefined) {
+                                            db.runSync(
+                                                `
+                                                    INSERT INTO customers (id, first_name, last_name, email)
+                                                    VALUES (?, ?, ?, ?);
+                                                `,
+                                                [
+                                                    id,
+                                                    firstName,
+                                                    lastName,
+                                                    email,
+                                                ],
+                                            );
+                                        } else {
+                                            db.runSync(
+                                                `
+                                                    INSERT INTO customers (id, first_name, last_name, email, phone_number)
+                                                    VALUES (?, ?, ?, ?, ?);
+                                                `,
+                                                [
+                                                    id,
+                                                    firstName,
+                                                    lastName,
+                                                    email,
+                                                    phoneNumber,
+                                                ],
+                                            );
+                                        }
+                                    } catch (error) {
+                                        const e = error as Error;
+                                        if (
+                                            e.message.includes(
+                                                "UNIQUE constraint failed: customers.email",
+                                            )
+                                        ) {
+                                            setError("Email already exists.");
+                                        } else {
+                                            setError(
+                                                "An error occurred: " +
+                                                    e.message,
+                                            );
+                                        }
+                                        return;
+                                    }
+                                    router.replace({
+                                        pathname: "/customer/[id]",
+                                        params: {
+                                            id: idString,
+                                        },
+                                    });
+                                },
+                            },
+                            {
+                                text: "No",
+                            },
+                        ],
+                    );
                 }}
             />
             {required && (
