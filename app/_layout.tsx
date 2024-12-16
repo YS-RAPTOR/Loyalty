@@ -30,7 +30,7 @@ const InitData = async (db: SQLiteDatabase) => {
             CREATE TABLE offers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 product TEXT NOT NULL,              
-                frequency TEXT NOT NULL,              
+                frequency INTEGER NOT NULL,              
                 discount REAL NOT NULL                
             );
             INSERT INTO users (username, password)

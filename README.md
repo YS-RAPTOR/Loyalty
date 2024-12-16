@@ -6,6 +6,7 @@
 -   [ ] Easy way to email the customer a qr code.
 -   [x] Search for a specific customer by fist name and last name or email.
 -   [x] Scan a qr code to get the customer information.
+-   [ ] Authentication for admin functionality.
 -   [ ] Update customer information (name, last name, email).
 -   [ ] Log that the customer bought a product covered by an offer.
 -   [ ] Display if the customer got a discount on a product.
@@ -13,8 +14,8 @@
 ## Available to Admin (Requires login)
 
 -   [ ] Undo the last log if a mistake was made.
--   [ ] Add a new offer with custom discount and time frame.
--   [ ] Remove an offer.
+-   [x] Add a new offer with custom discount and time frame.
+-   [x] Remove an offer.
 
 # UI
 
@@ -54,6 +55,6 @@
 
 ## Admin Page
 
--   [ ] Add an offer button.
--   [ ] Remove an offer button. (Requires confirmation)
--   [ ] Change password button.
+-   [x] Add an offer button.
+-   [x] Remove an offer button. (Requires confirmation)
+-   [x] Change password button.
