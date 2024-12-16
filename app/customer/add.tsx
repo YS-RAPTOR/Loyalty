@@ -67,6 +67,7 @@ export default function Add() {
                                                     VALUES (?, ?, ?, ?);
                                                 `,
                                                 [
+                                                    // @ts-ignore
                                                     id,
                                                     firstName,
                                                     lastName,
@@ -80,6 +81,7 @@ export default function Add() {
                                                     VALUES (?, ?, ?, ?, ?);
                                                 `,
                                                 [
+                                                    // @ts-ignore
                                                     id,
                                                     firstName,
                                                     lastName,

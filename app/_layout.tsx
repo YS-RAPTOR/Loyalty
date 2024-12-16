@@ -62,6 +62,10 @@ export default function RootLayout() {
                         options={{ title: "Add Customer" }}
                     />
                     <Stack.Screen
+                        name="customer/[id]"
+                        options={{ title: "Customer Details" }}
+                    />
+                    <Stack.Screen
                         name="customer/edit/[id]"
                         options={{ title: "Edit Customer Details" }}
                     />

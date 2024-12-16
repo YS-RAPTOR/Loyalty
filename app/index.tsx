@@ -1,8 +1,12 @@
 import { Pressable, Text, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Link, router } from "expo-router";
+import { Auth } from "@/components/auth";
+import { useState } from "react";
 
 export default function Index() {
+    const [open, setOpen] = useState(false);
+
     return (
         <View
             style={{
@@ -12,38 +16,53 @@ export default function Index() {
             }}
         >
             <MainButton
-                link="/scan"
                 text="Scan QR Code"
                 icon="qr-code-scanner"
                 color="#fcfc99"
+                onPress={() => {
+                    router.navigate("/scan");
+                }}
             />
             <MainButton
-                link="/search"
                 text="Search Customers"
                 color="#a8e4ef"
                 icon="search"
+                onPress={() => {
+                    router.navigate("/search");
+                }}
             />
             <MainButton
                 text="Add Customer"
-                link="/customer/add"
                 color="#79de79"
                 icon="person-add"
+                onPress={() => {
+                    router.navigate("/customer/add");
+                }}
             />
             <MainButton
-                link="/admin"
                 text="Admin Panel"
                 color="#fb6962"
                 icon="admin-panel-settings"
+                onPress={() => {
+                    setOpen(true);
+                }}
+            />
+            <Auth
+                onAuthenticated={() => {
+                    router.navigate("/admin");
+                }}
+                open={open}
+                setOpen={setOpen}
             />
         </View>
     );
 }
 
 const MainButton = (props: {
-    link: React.ComponentProps<typeof Link>["href"];
     text: string;
     icon: React.ComponentProps<typeof MaterialIcons>["name"];
     color: string;
+    onPress?: () => void;
 }) => {
     return (
         <Pressable
@@ -57,9 +76,7 @@ const MainButton = (props: {
                     flexGrow: 1,
                 },
             ]}
-            onPress={() => {
-                router.navigate(props.link);
-            }}
+            onPress={props.onPress}
         >
             <MaterialIcons name={props.icon} size={40} color="black" />
             <Text
