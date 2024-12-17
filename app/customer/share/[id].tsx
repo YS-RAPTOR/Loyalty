@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
-import { View } from "react-native";
+import { useState } from "react";
+import { Text, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
 export default function Share() {
@@ -14,7 +15,7 @@ export default function Share() {
             }}
         >
             {/* @ts-ignore */}
-            <QRCode value={id} />
+            <QRCode value={id} size={250} quietZone={25} />
         </View>
     );
 }
