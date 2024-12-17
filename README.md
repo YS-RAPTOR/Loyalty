@@ -15,7 +15,7 @@
 
 -   [x] Add a new offer with custom discount and time frame.
 -   [x] Remove an offer.
--   [ ] Undo the last log if a mistake was made.
+-   [x] Undo the last log if a mistake was made.
 
 # UI
 
@@ -45,8 +45,8 @@
 -   [x] Buttons to log a purchase (Requires confirmation).
     -   [x] Will display discount if discount applies.
 -   [x] Edit button to edit customer info.
--   [ ] Admin button that will require login to show.
-    -   [ ] Will show undo last log button.
+-   [x] Admin button that will require login to show.
+    -   [x] Will show undo last log button.
 
 ## Edit Customer Page
 

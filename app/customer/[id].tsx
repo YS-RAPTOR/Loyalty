@@ -1,6 +1,6 @@
 import { Auth } from "@/components/auth";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
@@ -223,7 +223,11 @@ export default function ViewCustomer() {
                         },
                     ]}
                     onPress={() => {
-                        // TODO: Share qr code
+                        router.navigate({
+                            pathname: "/customer/share/[id]",
+                            // @ts-ignore
+                            params: { id: id },
+                        });
                     }}
                 >
                     <MaterialIcons name="share" size={24} color="white" />

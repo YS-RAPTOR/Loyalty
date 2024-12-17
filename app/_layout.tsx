@@ -70,6 +70,10 @@ export default function RootLayout() {
                         options={{ title: "Edit Customer Details" }}
                     />
                     <Stack.Screen
+                        name="customer/share/[id]"
+                        options={{ title: "Share Customer Code" }}
+                    />
+                    <Stack.Screen
                         name="offer/[id]"
                         options={{ title: "Discount Applied" }}
                     />
