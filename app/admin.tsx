@@ -329,6 +329,7 @@ const ChangePassword = () => {
 
                     setPassword("");
                     setRetpyePassword("");
+                    alert("Password changed successfully.");
                 }}
             >
                 <Text

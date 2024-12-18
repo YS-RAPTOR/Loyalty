@@ -97,6 +97,7 @@ export default function Search() {
                                     ),
                                 },
                             });
+                            setData([]);
                         }}
                     >
                         <Ionicons name="person-circle-sharp" size={40} />

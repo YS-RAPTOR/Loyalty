@@ -1,8 +1,8 @@
 import { Auth } from "@/components/auth";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { UuidTool } from "uuid-tool";
@@ -22,14 +22,33 @@ export default function ViewCustomer() {
 
     // @ts-ignore
     const idBytes = UuidTool.toBytes(id);
-    const customer = db.getFirstSync<Customer>(
-        `
+
+    const [customer, setCustomer] = useState<Customer | null>(
+        db.getFirstSync<Customer>(
+            `
         SELECT first_name, last_name, email, phone_number, last_offer
         FROM customers
         WHERE id = ?;
     `,
-        // @ts-ignore
-        [idBytes],
+            // @ts-ignore
+            [idBytes],
+        ),
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            setCustomer(
+                db.getFirstSync<Customer>(
+                    `
+                        SELECT first_name, last_name, email, phone_number, last_offer
+                        FROM customers
+                        WHERE id = ?;
+                    `,
+                    // @ts-ignore
+                    [idBytes],
+                ),
+            );
+        }, []),
     );
 
     if (!customer) {
@@ -316,7 +335,7 @@ const OfferView = (props: { offer: Offer; id: number[] }) => {
             style={({ pressed }) => [
                 {
                     padding: 10,
-                    borderWidth: 1,
+                    semiborderWidth: 1,
                     borderRadius: 4,
                     flexDirection: "row",
                     gap: 8,
@@ -357,7 +376,7 @@ const OfferView = (props: { offer: Offer; id: number[] }) => {
                                         props.offer.frequency ===
                                     0
                                 ) {
-                                    router.navigate({
+                                    router.replace({
                                         pathname: "/offer/[id]",
                                         params: {
                                             id: props.offer.id,
