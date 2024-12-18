@@ -104,7 +104,12 @@ export default function Search() {
                             <Text style={styles.text}>
                                 Name: {item.first_name} {item.last_name}
                             </Text>
-                            <Text style={styles.text}>Email: {item.email}</Text>
+
+                            {item.email && (
+                                <Text style={styles.text}>
+                                    Email: {item.email}
+                                </Text>
+                            )}
                             {item.phone_number && (
                                 <Text style={styles.text}>
                                     Phone Number: {item.phone_number}

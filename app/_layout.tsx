@@ -22,9 +22,9 @@ const InitData = async (db: SQLiteDatabase) => {
             CREATE TABLE customers (
                 id BLOB PRIMARY KEY,        
                 first_name TEXT NOT NULL,   
-                last_name TEXT NOT NULL,    
-                email TEXT UNIQUE NOT NULL,
-                phone_number TEXT,          
+                last_name TEXT,    
+                email TEXT UNIQUE,
+                phone_number TEXT UNIQUE NOT NULL,          
                 last_offer INTEGER
             );
             CREATE TABLE offers (

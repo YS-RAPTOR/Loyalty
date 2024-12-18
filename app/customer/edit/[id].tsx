@@ -83,15 +83,11 @@ export default function Add() {
                     setError("");
                     if (
                         firstName === undefined ||
-                        lastName === undefined ||
-                        email === undefined ||
                         firstName === "" ||
-                        lastName === "" ||
-                        email === ""
+                        phoneNumber === undefined ||
+                        phoneNumber === ""
                     ) {
-                        setError(
-                            "First Name, Last Name, and Email are required.",
-                        );
+                        setError("First Name and Phone Number are required.");
                         return;
                     }
                     setError("");
@@ -105,21 +101,21 @@ export default function Add() {
                         `,
                             [
                                 firstName,
-                                lastName,
-                                email,
-                                phoneNumber ?? null,
+                                lastName ?? null,
+                                email ?? null,
+                                phoneNumber,
                                 // @ts-ignore
                                 idBytes,
                             ],
                         );
                     } catch (error) {
                         const e = error as Error;
-                        if (
-                            e.message.includes(
-                                "UNIQUE constraint failed: customers.email",
-                            )
-                        ) {
-                            setError("Email already exists.");
+                        if (e.message.includes("UNIQUE constraint failed: ")) {
+                            if (e.message.includes("email")) {
+                                setError("Email already exists.");
+                            } else if (e.message.includes("phone_number")) {
+                                setError("Phone number already exists.");
+                            }
                         } else {
                             setError("An error occurred: " + e.message);
                         }

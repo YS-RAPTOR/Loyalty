@@ -10,7 +10,6 @@ import { UuidTool } from "uuid-tool";
 
 export default function Add() {
     const db = useSQLiteContext();
-    const [required, setRequired] = useState(false);
     const [error, setError] = useState("");
 
     return (
@@ -38,16 +37,13 @@ export default function Add() {
                     setError("");
                     if (
                         firstName === undefined ||
-                        lastName === undefined ||
-                        email === undefined ||
                         firstName === "" ||
-                        lastName === "" ||
-                        email === ""
+                        phoneNumber === undefined ||
+                        phoneNumber === ""
                     ) {
-                        setRequired(true);
+                        setError("First Name and Phone Number are required.");
                         return;
                     }
-                    setRequired(false);
 
                     return Alert.alert(
                         "Add Customer",
@@ -60,44 +56,40 @@ export default function Add() {
                                     const id = UuidTool.toBytes(idString);
 
                                     try {
-                                        if (phoneNumber === undefined) {
-                                            db.runSync(
-                                                `
-                                                    INSERT INTO customers (id, first_name, last_name, email)
-                                                    VALUES (?, ?, ?, ?);
-                                                `,
-                                                [
-                                                    // @ts-ignore
-                                                    id,
-                                                    firstName,
-                                                    lastName,
-                                                    email,
-                                                ],
-                                            );
-                                        } else {
-                                            db.runSync(
-                                                `
+                                        db.runSync(
+                                            `
                                                     INSERT INTO customers (id, first_name, last_name, email, phone_number)
                                                     VALUES (?, ?, ?, ?, ?);
                                                 `,
-                                                [
-                                                    // @ts-ignore
-                                                    id,
-                                                    firstName,
-                                                    lastName,
-                                                    email,
-                                                    phoneNumber,
-                                                ],
-                                            );
-                                        }
+                                            [
+                                                // @ts-ignore
+                                                id,
+                                                firstName,
+                                                lastName ?? null,
+                                                email ?? null,
+                                                phoneNumber,
+                                            ],
+                                        );
                                     } catch (error) {
                                         const e = error as Error;
                                         if (
                                             e.message.includes(
-                                                "UNIQUE constraint failed: customers.email",
+                                                "UNIQUE constraint failed: ",
                                             )
                                         ) {
-                                            setError("Email already exists.");
+                                            if (e.message.includes("email")) {
+                                                setError(
+                                                    "Email already exists.",
+                                                );
+                                            } else if (
+                                                e.message.includes(
+                                                    "phone_number",
+                                                )
+                                            ) {
+                                                setError(
+                                                    "Phone number already exists.",
+                                                );
+                                            }
                                         } else {
                                             setError(
                                                 "An error occurred: " +
@@ -121,17 +113,6 @@ export default function Add() {
                     );
                 }}
             />
-            {required && (
-                <Text
-                    style={{
-                        fontSize: 12,
-                        color: "red",
-                        fontWeight: "bold",
-                    }}
-                >
-                    First Name, Last Name, and Email are required.
-                </Text>
-            )}
             {error != "" && (
                 <Text
                     style={{

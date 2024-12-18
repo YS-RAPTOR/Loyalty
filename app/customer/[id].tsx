@@ -300,6 +300,17 @@ const Offers = (props: { id: number[] }) => {
 
 const OfferView = (props: { offer: Offer; id: number[] }) => {
     const db = useSQLiteContext();
+
+    const customer = db.getFirstSync<any>(
+        `SELECT first_name, offer_${props.offer.id} from customers where id = ?`,
+        // @ts-ignore
+        [props.id],
+    );
+
+    const remaining =
+        props.offer.frequency -
+        (customer[`offer_${props.offer.id}`] % props.offer.frequency);
+
     return (
         <Pressable
             style={({ pressed }) => [
@@ -368,6 +379,16 @@ const OfferView = (props: { offer: Offer; id: number[] }) => {
                 <Text style={styles.text}>
                     Discount of {props.offer.discount * 100}% applied every{" "}
                     {props.offer.frequency} orders.
+                </Text>
+                <Text
+                    style={{
+                        fontSize: 12,
+                        fontWeight: "bold",
+                        color: "red",
+                    }}
+                >
+                    {customer.first_name} is {remaining} away from the next
+                    discount.
                 </Text>
             </View>
         </Pressable>
