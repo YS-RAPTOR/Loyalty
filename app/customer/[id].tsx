@@ -284,6 +284,7 @@ type Offer = {
     product: string;
     frequency: number;
     discount: number;
+    color: string;
 };
 
 const styles = StyleSheet.create({
@@ -340,7 +341,7 @@ const OfferView = (props: { offer: Offer; id: number[] }) => {
                     flexDirection: "row",
                     gap: 8,
                     alignContent: "center",
-                    backgroundColor: pressed ? "#ddd" : "transparent",
+                    backgroundColor: pressed ? "#ddd" : props.offer.color,
                 },
             ]}
             onPress={() => {

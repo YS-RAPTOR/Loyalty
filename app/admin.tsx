@@ -1,7 +1,6 @@
 import { useSQLiteContext } from "expo-sqlite";
 import {
     Alert,
-    FlatList,
     Pressable,
     StyleSheet,
     Text,
@@ -18,6 +17,7 @@ type Offer = {
     product: string;
     frequency: number;
     discount: number;
+    color: string;
 };
 
 const styles = StyleSheet.create({
@@ -75,6 +75,7 @@ const AddOffer = () => {
     const [product, setProduct] = useState("");
     const [frequency, setFrequency] = useState("");
     const [discount, setDiscount] = useState("");
+    const [color, setColor] = useState("#FFFFFF");
     const [error, setError] = useState("");
     const db = useSQLiteContext();
 
@@ -148,6 +149,27 @@ const AddOffer = () => {
                     onChangeText={setDiscount}
                     keyboardType="numeric"
                 ></TextInput>
+                <View>
+                    <Text
+                        style={{
+                            fontSize: 12,
+                            fontWeight: "bold",
+                        }}
+                    >
+                        Color
+                    </Text>
+                    <TextInput
+                        style={{
+                            borderWidth: 1,
+                            borderColor: "black",
+                            paddingVertical: 5,
+                            paddingHorizontal: 10,
+                            borderRadius: 4,
+                        }}
+                        value={color}
+                        onChangeText={setColor}
+                    ></TextInput>
+                </View>
             </View>
 
             <View
@@ -200,9 +222,14 @@ const AddOffer = () => {
                             return;
                         }
 
+                        if (color.length != 7 || color[0] != "#") {
+                            setError("Color must be valid Hex code");
+                            return;
+                        }
+
                         const statement = db.prepareSync(`
-                            INSERT INTO offers (product, frequency, discount)
-                            VALUES (?, ?, ?);
+                            INSERT INTO offers (product, frequency, discount, color)
+                            VALUES (?, ?, ?, ?);
                         `);
 
                         db.withTransactionSync(() => {
@@ -210,6 +237,7 @@ const AddOffer = () => {
                                 product,
                                 frequencyValue,
                                 discountValue,
+                                color,
                             ]);
 
                             const offerId = db.getFirstSync<{
@@ -356,7 +384,7 @@ const OfferView = (props: Offer) => {
                     flexDirection: "row",
                     gap: 8,
                     alignpropss: "center",
-                    backgroundColor: pressed ? "#fb6962" : "transparent",
+                    backgroundColor: pressed ? "#fb6962" : props.color,
                 },
             ]}
             onPress={() => {

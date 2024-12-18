@@ -31,7 +31,8 @@ const InitData = async (db: SQLiteDatabase) => {
                 id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 product TEXT NOT NULL,              
                 frequency INTEGER NOT NULL,              
-                discount REAL NOT NULL                
+                discount REAL NOT NULL,
+                color TEXT NOT NULL
             );
             INSERT INTO users (username, password)
             VALUES ('admin', 'admin');
